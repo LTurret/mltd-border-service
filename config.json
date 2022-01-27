@@ -1,0 +1,7 @@
+{
+    "data_broadcasting": "./dataset/border.json",
+    "data_eventinfo": "./dataset/information.json",
+    "background": "./components/AnnaFrame.png",
+    "font_filepath": "./components/jf-openhuninn-1.1.ttf",
+    "title_font_filepath": "./components/ChiuKongGothic-CL-Regular.otf"
+}
