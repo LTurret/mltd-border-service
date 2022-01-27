@@ -1,6 +1,7 @@
-# MLTD日服榜線抓取以及圖片產生器
+## MLTD日服榜線抓取以及圖片產生器
 所有榜線資訊都由api.matsurihi.me提供
-
+  
+  
 ## 使用方法
 使用argparse格式，在terminal中輸入：`python main.py -t [*choices]`  
 
