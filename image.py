@@ -51,7 +51,7 @@ async def makeimg(category):
         case 3:
             eventType = "Theater"
         case 4:
-            eventType = "Tout"
+            eventType = "Tour"
         case 11:
             eventType = "Tune"
         case 13:
