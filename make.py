@@ -7,7 +7,7 @@ async def makefile(file:json, filename:str):
     except Exception as e:
         print(f"issue occur: {e}")
     finally:
-        print(f'makefile task "{filename}" terminate')
+        print(f'file "{filename}.json" created.')
 
 if __name__ == "__main__":
     print('using "main.py" instead.')
