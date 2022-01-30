@@ -10,14 +10,14 @@ from src.image import makeimg
 parser = argparse.ArgumentParser(
     description="Generator that fetches hosting event information and border datasets then generates border image."
 )
-parser.add_argument("-S", "--search_id", nargs=1, type=int, metavar="",
-                    required=False,
-                    help="Search specific event with unique ID"
-                )
 parser.add_argument("-O", "--output_path", nargs=1, type=str, metavar="",
                     required=False,
                     default="./img-output",
                     help='Image generate ouput path, default is "./img-output"'
+                )
+parser.add_argument("-S", "--search_id", nargs=1, type=int, metavar="",
+                    required=False,
+                    help="Search specific event with unique ID"
                 )
 parser.add_argument("-T", "--type", nargs="+", type=str, metavar="",
                     required=False,
@@ -25,13 +25,13 @@ parser.add_argument("-T", "--type", nargs="+", type=str, metavar="",
                     choices=["pt", "hs", "lp"]
                 )
 group = parser.add_mutually_exclusive_group()
-group.add_argument("--checksum",
-                    action="store_true",
-                    help=f"Don't generate any folder to disk, test API response"
-                )
 group.add_argument("--dryrun",
                     action="store_true",
-                    help=f"Don't generate image and output folder to disk"
+                    help=f"Don't generate border-image and output folder to disk"
+                )
+group.add_argument("--checksum",
+                    action="store_true",
+                    help=f"Don't generate any file or folder, test API response"
                 )
 opt = parser.parse_args()
 
