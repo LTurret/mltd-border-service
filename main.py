@@ -12,8 +12,8 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument("-O", "--output_path", nargs=1, type=str, metavar="",
                     required=False,
-                    default="./img-output",
-                    help='Image generate ouput path, default is "./img-output"'
+                    default="image",
+                    help='Image generate ouput path, default is "./image"'
                 )
 parser.add_argument("-S", "--search_id", nargs=1, type=int, metavar="",
                     required=False,
@@ -52,17 +52,21 @@ async def main(datatype, output_path, checksum, dryrun, search_id):
                 return False
 
     async with aiohttp.ClientSession() as session:
-        if search_id is not None:
+        if (search_id is not None):
             eventData = await SearchEvent(search_id[0], session)
+            tasks = []
             if (typematch(eventData["type"])):
-                tasks = [asyncio.create_task(FetchBorder(search_id[0], session))]
+                tasks.append(asyncio.create_task(FetchBorder(search_id[0], session)))
         else:
             eventData = await GetNewestEvent(session)
             evtID = eventData["id"]
-            tasks = [asyncio.create_task(FetchBorder(evtID, session))]
+            tasks = []
+            if (typematch(eventData["type"])):
+                tasks.append(asyncio.create_task(FetchBorder(evtID, session)))
         await asyncio.gather(*tasks)
         information = eventData
-        border = tasks[0].result()
+        if (typematch(eventData["type"])):
+            border = tasks[0].result()
         print("fetch data complete.")
 
         if checksum:
@@ -75,20 +79,20 @@ async def main(datatype, output_path, checksum, dryrun, search_id):
                 os.mkdir("./dataset")
             os.chdir("./dataset")
             tasks = [
-                asyncio.create_task(makefile(information, "information")),
-                asyncio.create_task(makefile(border, "border"))
+                asyncio.create_task(makefile(information, "information"))
             ]
+            if (typematch(eventData["type"])):
+                tasks.append(asyncio.create_task(makefile(border, "border")))
             await asyncio.gather(*tasks)
 
-            if dryrun:
-                print("dryrun complete.")
+            if (dryrun or not(typematch(eventData["type"]))):
                 pass
             else:
                 os.chdir("../")
-                if os.path.isdir(f"{output_path[0]}"):
+                if os.path.isdir(f"{output_path}"):
                     pass
                 else:
-                    os.mkdir(f"{output_path[0]}")
+                    os.mkdir(f"{output_path}")
 
                 tasks = []
                 for category in datatype:
@@ -99,7 +103,7 @@ async def main(datatype, output_path, checksum, dryrun, search_id):
                             category = "highScore"
                         case "lp":
                             category = "loungePoint"
-                    tasks.append(makeimg(category, output_path[0]))
+                    tasks.append(makeimg(category, output_path))
                 await asyncio.gather(*tasks)
 
 if __name__ == "__main__":

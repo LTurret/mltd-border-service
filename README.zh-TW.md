@@ -13,7 +13,7 @@ usage: main.py [-h] [-O] [-S] [-T  [...]] [--dryrun | --checksum]
 可以抓取當前活動資訊以及輸出排行圖片的產生器
 
 options:
-  -O , --output_path    圖片輸出路徑，預設為 "./img-output"
+  -O , --output_path    圖片輸出路徑，預設為 "./image"
   -S , --search_id      使用獨立ID搜尋特定的活動
   -T  [ ...], --type  [ ...]
                         選擇欲抓取的活動類型

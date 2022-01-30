@@ -6,7 +6,7 @@ from PIL import ImageFont
 from PIL import ImageDraw
 import datetime
 
-async def makeimg(category, path:str="img-output"):
+async def makeimg(category, path:str="image"):
     def categories(category):
         match category:
             case "eventPoint":

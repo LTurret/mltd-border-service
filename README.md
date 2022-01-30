@@ -14,7 +14,7 @@ Generator that fetches hosting event information and border datasets then genera
 
 options:
   -h, --help            show this help message and exit
-  -O , --output_path    Image generate ouput path, default is "./img-output"
+  -O , --output_path    Image generate ouput path, default is "./image"
   -S , --search_id      Search specific event with unique ID
   -T  [ ...], --type  [ ...]
                         Select fetches border type
