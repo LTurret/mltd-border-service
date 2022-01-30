@@ -1,12 +1,39 @@
-## MLTD日服榜線抓取以及圖片產生器
+# MLTD JP server event fetcher and border-image generator
 
-所有榜線資訊都由api.matsurihi.me提供
+English | [繁體中文](README.zh-TW.md)
+
+A Python based Rank fetcher and border-image generator
   
-## 使用方法
+## Usage
 
-使用argparse格式，在terminal中輸入：`python main.py -t [choices]`  
+```console
+$ python main.py --help
+usage: main.py [-h] [-O] [-S] [-T  [...]] [--dryrun | --checksum]
 
-## 說明
+Generator that fetches hosting event information and border datasets then generates border image.
 
-`choices` 為榜線類型，提供了pt榜("pt")、高分榜("hs")、廳榜("lp")  
-`choices` 為 `*args` 格式，提供一次輸入多種榜線類型，能夠一次輸出三種榜線圖片
+options:
+  -h, --help            show this help message and exit
+  -O , --output_path    Image generate ouput path, default is "./img-output"
+  -S , --search_id      Search specific event with unique ID
+  -T  [ ...], --type  [ ...]
+                        Select fetches border type
+  --dryrun              Don't generate border-image and output folder to disk
+  --checksum            Don't generate any file or folder, test API response
+PS C:\Users\a0919\Desktop\Files\Programming\Github\mltd-border-service>
+```
+
+## Option decription
+
+`choices` is border type, provides PT-rank("pt"), HighScore("hs"), LoungePoint("lp")  
+`choices` is `*args` format, provide enter multiple border type, it can generate more than one type of border-image  
+
+
+## License
+
+Licensed under [MIT](LICENSE).
+
+All the event information is provided by [api.matsurihi.me](https://api.matsurihi.me/docs/)  
+The copyright of character in the image(includes .psd, .png) belongs to Bandai Namco Entertainment.
+Font in the image title is [ChiuKong Gothic](https://github.com/ChiuMing-Neko/ChiuKongGothic) 
+Font in the image body is [jf open 粉圓](https://github.com/justfont/open-huninn-font) 
