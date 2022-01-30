@@ -25,7 +25,7 @@ options:
 ## Option decription
 
 `[-T [...]]` is border type, provides PT-rank("pt"), HighScore("hs"), LoungePoint("lp")  
-it provide enter multiple border type, it can generate more than one type of border-image  
+it can enter multiple border types, it can generate more than one type of border-image  
 
 ## License
 
