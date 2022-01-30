@@ -117,6 +117,8 @@ async def makeimg(category):
                 argx = 36
             elif (length_adjust > 4 and length_adjust < 7):
                 argx = 18
+            elif (length_adjust > 9):
+                break
             else:
                 argx = 0
 
