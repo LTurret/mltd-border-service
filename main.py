@@ -1,11 +1,11 @@
-from email.policy import default
 import aiohttp
 import argparse
 import asyncio
 import os
-from fetch import GetNewestEvent, SearchEvent, FetchBorder, FetchCover
-from make import makefile
-from image import makeimg
+
+from src.fetch import GetNewestEvent, SearchEvent, FetchBorder, FetchCover
+from src.make import makefile
+from src.image import makeimg
 
 parser = argparse.ArgumentParser(
     description="Generator that fetches hosting event information and border datasets then generates border image."
@@ -36,22 +36,33 @@ group.add_argument("--dryrun",
 opt = parser.parse_args()
 
 async def main(datatype, output_path, checksum, dryrun, search_id):
+    def typematch(typeid):
+        match typeid:
+            case 3:
+                return True
+            case 4:
+                return True
+            case 11:
+                return True
+            case 13:
+                return True
+            case 16:
+                return True
+            case _:
+                return False
+
     async with aiohttp.ClientSession() as session:
         if search_id is not None:
-            tasks = [
-                asyncio.create_task(SearchEvent(search_id[0], session)),
-                asyncio.create_task(FetchBorder(search_id[0], session))
-            ]
+            eventData = await SearchEvent(search_id[0], session)
+            if (typematch(eventData["type"])):
+                tasks = [asyncio.create_task(FetchBorder(search_id[0], session))]
         else:
-            evtID = await GetNewestEvent(session)
-            evtID = evtID["id"]
-            tasks = [
-                asyncio.create_task(SearchEvent(evtID, session)),
-                asyncio.create_task(FetchBorder(evtID, session))
-            ]
+            eventData = await GetNewestEvent(session)
+            evtID = eventData["id"]
+            tasks = [asyncio.create_task(FetchBorder(evtID, session))]
         await asyncio.gather(*tasks)
-        information = tasks[0].result()
-        border = tasks[1].result()
+        information = eventData
+        border = tasks[0].result()
         print("fetch data complete.")
 
         if checksum:
@@ -74,10 +85,10 @@ async def main(datatype, output_path, checksum, dryrun, search_id):
                 pass
             else:
                 os.chdir("../")
-                if os.path.isdir(f"{output_path}"):
+                if os.path.isdir(f"{output_path[0]}"):
                     pass
                 else:
-                    os.mkdir(f"{output_path}")
+                    os.mkdir(f"{output_path[0]}")
 
                 tasks = []
                 for category in datatype:
@@ -88,7 +99,7 @@ async def main(datatype, output_path, checksum, dryrun, search_id):
                             category = "highScore"
                         case "lp":
                             category = "loungePoint"
-                    tasks.append(makeimg(category))
+                    tasks.append(makeimg(category, output_path[0]))
                 await asyncio.gather(*tasks)
 
 if __name__ == "__main__":
