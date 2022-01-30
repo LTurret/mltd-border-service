@@ -20,7 +20,6 @@ options:
                         Select fetches border type
   --dryrun              Don't generate border-image and output folder to disk
   --checksum            Don't generate any file or folder, test API response
-PS C:\Users\a0919\Desktop\Files\Programming\Github\mltd-border-service>
 ```
 
 ## Option decription
