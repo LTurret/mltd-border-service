@@ -32,6 +32,6 @@ it can enter multiple border types, generates more than one border-image
 Licensed under [MIT](LICENSE).
 
 All the event information is provided by [api.matsurihi.me](https://api.matsurihi.me/docs/)  
-The copyright of character in the image(includes .psd, .png) belongs to Bandai Namco Entertainment.  
-Font in the image title is [ChiuKong Gothic](https://github.com/ChiuMing-Neko/ChiuKongGothic)  
-Font in the image body is [jf open 粉圓](https://github.com/justfont/open-huninn-font)  
+The copyright of any characters in the image(includes .psd, .png) belongs to Bandai Namco Entertainment.  
+Font used in the image title is [ChiuKong Gothic](https://github.com/ChiuMing-Neko/ChiuKongGothic)  
+Font used in the image body is [jf open 粉圓](https://github.com/justfont/open-huninn-font)  
