@@ -29,7 +29,7 @@ it can enter multiple border types, generates more than one border-image
 
 ## Customization
 
-.psd file in the `components` folder makes everyone change border-background to their own style  
+.psd file in the `./components` folder makes everyone change border-background to their own style  
 
 ## Configuration
 
