@@ -7,13 +7,12 @@ A Python based Rank fetcher and border-image generator
 ## Usage
 
 ```console
-$ python main.py --help
-usage: main.py [-h] [-O] [-S] [-T  [...]] [--dryrun | --checksum]
+$ ./AnnaBorder --help
+usage: AnnaBorder.exe [-h] [-O] [-S] -T  [...] [--dryrun | --checksum]
 
 Generator that fetches hosting event information and border datasets then generates border image.
 
 options:
-  -h, --help            show this help message and exit
   -O , --output_path    Image generate ouput path, default is "./image"
   -S , --search_id      Search specific event with unique ID
   -T  [ ...], --type  [ ...]
@@ -26,6 +25,14 @@ options:
 
 `[-T [...]]` is border type, using `*args` format, provides PT-rank("pt"), HighScore("hs"), LoungePoint("lp")  
 it can enter multiple border types, generates more than one border-image  
+
+## Customization
+
+.psd file in the `components` folder makes everyone change border-background to their own style  
+
+## Configuration
+
+`config.json` is **event informations data**, **border data**, **fonts**, **background** file location, with customization, convenient file organization
 
 ## License
 

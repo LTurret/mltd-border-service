@@ -8,11 +8,12 @@
 
 ```console
 $ python main.py --help
-usage: main.py [-h] [-O] [-S] [-T  [...]] [--dryrun | --checksum]
+usage: AnnaBorder.exe [-h] [-O] [-S] -T  [...] [--dryrun | --checksum]
 
 可以抓取當前活動資訊以及輸出排行圖片的產生器
 
 options:
+  -h, --help            顯示幫助說明
   -O , --output_path    圖片輸出路徑，預設為 "./image"
   -S , --search_id      使用獨立ID搜尋特定的活動
   -T  [ ...], --type  [ ...]
@@ -25,6 +26,14 @@ options:
 
 `[-T [...]]` 是排行類型，使用`*args`格式，提供了提供了PT榜("pt")、高分榜("hs")、廳榜("lp")  
 可以同時輸入多種排行類型，輸出不只一張排行圖片  
+
+## 自訂化
+
+在`./components`的.psd資料讓大家可以改變排行圖片的背景為自己想要的風格
+
+## Configuration
+
+`config.json`是 **活動資訊資料**, **排行資料**, **字體檔**, **背景圖** 的檔案位置設定檔，配合自訂義能夠方便管理檔案
 
 ## 授權
 
