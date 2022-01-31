@@ -7,7 +7,7 @@
 ## 使用方法
 
 ```console
-$ python main.py --help
+$ ./AnnaBorder --help
 usage: AnnaBorder.exe [-h] [-O] [-S] -T  [...] [--dryrun | --checksum]
 
 可以抓取當前活動資訊以及輸出排行圖片的產生器
