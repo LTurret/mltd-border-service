@@ -13,6 +13,7 @@ usage: AnnaBorder.exe [-h] [-O] [-S] -T  [...] [--dryrun | --checksum]
 Generator that fetches hosting event information and border datasets then generates border image.
 
 options:
+  -h, --help            show this help message and exit
   -O , --output_path    Image generate ouput path, default is "./image"
   -S , --search_id      Search specific event with unique ID
   -T  [ ...], --type  [ ...]
@@ -32,7 +33,7 @@ it can enter multiple border types, generates more than one border-image
 
 ## Configuration
 
-`config.json` is **event informations data**, **border data**, **fonts**, **background** file location, with customization, convenient file organization
+`config.json` is **event informations data**, **border data**, **fonts**, **background** file location, with customization, convenient the file organization
 
 ## License
 
