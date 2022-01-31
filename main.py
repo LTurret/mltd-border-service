@@ -20,7 +20,7 @@ parser.add_argument("-S", "--search_id", nargs=1, type=int, metavar="",
                     help="Search specific event with unique ID"
                 )
 parser.add_argument("-T", "--type", nargs="+", type=str, metavar="",
-                    required=False,
+                    required=True,
                     help="Select fetches border type",
                     choices=["pt", "hs", "lp"]
                 )

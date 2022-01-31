@@ -25,13 +25,13 @@ async def makeimg(category, path:str="image"):
             category = "loungePoint"
 
     # 檔案設定
-    with open("config.json") as config:
+    with open("./config.json") as config:
         config = json.load(config)
-        background = config["background"]
-        data_border = config["data_broadcasting"]
-        data_eventinfo = config["data_eventinfo"]
-        font_filepath = config["font_filepath"]
-        title_font_filepath = config["title_font_filepath"]
+        background = "./components/AnnaFrame.png"
+        data_border = "./dataset/border.json"
+        data_eventinfo = "./dataset/information.json"
+        font_filepath = "./components/jf-openhuninn-1.1.ttf"
+        title_font_filepath = "./components/ChiuKongGothic-CL-Regular.otf"
 
     with open(data_border, mode="r", encoding='utf8') as file:
         borderData = json.load(file)
