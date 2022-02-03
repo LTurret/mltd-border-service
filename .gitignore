@@ -5,3 +5,7 @@ AnnaBorder-x64-win/components/AnnaFrame.psd
 AnnaBorder-x64-win/components/ChiuKongGothic-CL-Regular.otf
 AnnaBorder-x64-win/components/jf-openhuninn-1.1.ttf
 AnnaBorder-x64-win/config.json
+
+**/__pycache__
+image
+dataset

@@ -1,15 +1,15 @@
-import aiohttp
 import argparse
 import asyncio
 import os
 
-from src.fetch import GetNewestEvent, SearchEvent, FetchBorder, FetchCover
-from src.make import makefile
-from src.image import makeimg
+import aiohttp
 
-parser = argparse.ArgumentParser(
-    description="Generator that fetches hosting event information and border datasets then generates border image."
-)
+from src.fetch import FetchBorder, FetchCover, GetNewestEvent, SearchEvent
+from src.image import makeimg
+from src.make import makefile
+
+parser = argparse.ArgumentParser(description="MLTD event information and score border image generator.")
+
 parser.add_argument("-O", "--output_path", nargs=1, type=str, metavar="",
                     required=False,
                     default="image",
@@ -38,61 +38,52 @@ opt = parser.parse_args()
 async def main(datatype, output_path, checksum, dryrun, search_id):
     def typematch(typeid):
         match typeid:
-            case 3:
-                return True
-            case 4:
-                return True
-            case 11:
-                return True
-            case 13:
-                return True
-            case 16:
+            case 3 | 4 | 11 | 13 | 16:
                 return True
             case _:
                 return False
 
     async with aiohttp.ClientSession() as session:
-        if (search_id is not None):
+        if search_id is not None:
             eventData = await SearchEvent(search_id[0], session)
             tasks = []
-            if (typematch(eventData["type"])):
+            if typematch(eventData["type"]):
                 tasks.append(asyncio.create_task(FetchBorder(search_id[0], session)))
         else:
             eventData = await GetNewestEvent(session)
             evtID = eventData["id"]
             tasks = []
-            if (typematch(eventData["type"])):
+            if typematch(eventData["type"]):
                 tasks.append(asyncio.create_task(FetchBorder(evtID, session)))
         await asyncio.gather(*tasks)
         information = eventData
-        if (typematch(eventData["type"])):
+        if typematch(eventData["type"]):
             border = tasks[0].result()
         print("fetch data complete.")
 
         if checksum:
             print("checksum complete.")
-            pass
         else: 
-            if os.path.isdir("./dataset"):
-                pass
+            if os.path.exists("./dataset"):
+                if not os.path.isdir("./dataset"):
+                    raise NotImplementedError() # EEXIST
             else:
                 os.mkdir("./dataset")
             os.chdir("./dataset")
             tasks = [
                 asyncio.create_task(makefile(information, "information"))
             ]
-            if (typematch(eventData["type"])):
+            if typematch(eventData["type"]):
                 tasks.append(asyncio.create_task(makefile(border, "border")))
             await asyncio.gather(*tasks)
 
-            if (dryrun or not(typematch(eventData["type"]))):
-                pass
-            else:
+            if not dryrun and typematch(eventData["type"]):
                 os.chdir("../")
-                if os.path.isdir(f"{output_path}"):
-                    pass
+                if os.path.exists(output_path):
+                    if not os.path.isdir(output_path):
+                        raise NotImplementedError() # EEXIST
                 else:
-                    os.mkdir(f"{output_path}")
+                    os.mkdir(output_path)
 
                 tasks = []
                 for category in datatype:
