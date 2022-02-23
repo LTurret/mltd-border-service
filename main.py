@@ -36,20 +36,29 @@ group.add_argument("--checksum",
 opt = parser.parse_args()
 
 async def main(datatype, output_path, checksum, dryrun, search_id):
+    # typematch is always for checking event existence
     def typematch(typeid):
         if typeid == (3 | 4 | 11 | 13 | 16):
             return True
 
     async with aiohttp.ClientSession() as session:
+
+        # search with ID
         if search_id is not None:
             eventData = await SearchEvent(search_id[0], session)
             tasks = []
+
+            # checking if this is event, but this is bad method, staged change
             if typematch(eventData["type"]):
                 tasks.append(asyncio.create_task(FetchBorder(search_id[0], session)))
+        
+        # get newest directly
         else:
             eventData = await GetNewestEvent(session)
             evtID = eventData["id"]
             tasks = []
+
+            # checking if this is event, but this is bad method, staged change
             if typematch(eventData["type"]):
                 tasks.append(asyncio.create_task(FetchBorder(evtID, session)))
         await asyncio.gather(*tasks)
@@ -68,13 +77,13 @@ async def main(datatype, output_path, checksum, dryrun, search_id):
                 os.mkdir("./dataset")
             os.chdir("./dataset")
             tasks = [
-                asyncio.create_task(makefile(information, "information"))
-            ]
-            if typematch(eventData["type"]):
-                tasks.append(asyncio.create_task(makefile(border, "border")))
+                asyncio.create_task(makefile(information, "information")),
+                asyncio.create_task(makefile(border, "border"))
+            ] 
             await asyncio.gather(*tasks)
+            os.chdir("../")
 
-            if not dryrun and typematch(eventData["type"]):
+            if not dryrun:
                 os.chdir("../")
                 if os.path.exists(output_path):
                     if not os.path.isdir(output_path):
@@ -89,7 +98,8 @@ async def main(datatype, output_path, checksum, dryrun, search_id):
                         "hs": "hightScore",
                         "lp": "loungePoint"
                     }
-                    tasks.append(makeimg(category, output_path))
+                    tasks.append(makeimg(manifest[category], output_path))
+                print(tasks)
                 await asyncio.gather(*tasks)
 
 if __name__ == "__main__":
