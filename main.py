@@ -36,12 +36,12 @@ group.add_argument("--checksum",
 opt = parser.parse_args()
 
 async def main(datatype, output_path, checksum, dryrun, search_id):
-    def typematch(typeid):
-        manifest = [3 | 4 | 11 | 13 | 16]
+    def typematch(typeid:int):
+        manifest = [3, 4, 11, 13, 16]
         return manifest.count(typeid)
 
     async with aiohttp.ClientSession() as session:
-        if (search_id is not None):
+        if search_id:
             eventData = await SearchEvent(search_id[0], session)
             tasks = []
             if (typematch(eventData["type"])):
@@ -61,10 +61,8 @@ async def main(datatype, output_path, checksum, dryrun, search_id):
         if checksum:
             print("checksum complete.")
             pass
-        else: 
-            if os.path.isdir("./dataset"):
-                pass
-            else:
+        else:
+            if not os.path.isdir("./dataset"):
                 os.mkdir("./dataset")
             os.chdir("./dataset")
             tasks = [

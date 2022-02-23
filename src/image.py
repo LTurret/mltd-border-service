@@ -50,7 +50,7 @@ async def makeimg(category, path:str="image"):
     beginDate = eventData["schedule"]["beginDate"]
     endDate = eventData["schedule"]["endDate"]
     boostDate = eventData["schedule"]["boostBeginDate"]
-    timeSummaries = borderData[fullform(category)]["summaryTime"]
+    timeSummaries = borderData[category]["summaryTime"]
 
     # 格式化日期
     beginDate = beginDate.replace("-", "/")[0:10]
