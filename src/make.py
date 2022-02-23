@@ -1,10 +1,13 @@
 import json
 
-async def makefile(import_file:json, filename:str):
+async def makefile(file:json, filename:str):
     try:
         with open(f"{filename}.json", mode="w", encoding="utf-8") as data:
-            data = json.dump(import_file, data, indent=4, ensure_ascii=False)
+            data = json.dump(file, data, indent=4, ensure_ascii=False)
     except Exception as e:
-        print(f"error occure: {e}")
-    else:
+        print(f"issue occur: {e}")
+    finally:
         print(f'file "{filename}.json" created.')
+
+if __name__ == "__main__":
+    print('using "main.py" instead.')
