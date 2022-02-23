@@ -37,11 +37,8 @@ opt = parser.parse_args()
 
 async def main(datatype, output_path, checksum, dryrun, search_id):
     def typematch(typeid):
-        match typeid:
-            case 3 | 4 | 11 | 13 | 16:
-                return True
-            case _:
-                return False
+        if typeid == (3 | 4 | 11 | 13 | 16):
+            return True
 
     async with aiohttp.ClientSession() as session:
         if search_id is not None:
@@ -87,13 +84,11 @@ async def main(datatype, output_path, checksum, dryrun, search_id):
 
                 tasks = []
                 for category in datatype:
-                    match category:
-                        case "pt":
-                            category = "eventPoint"
-                        case "hs":
-                            category = "highScore"
-                        case "lp":
-                            category = "loungePoint"
+                    manifest = {
+                        "pt": "eventPoint",
+                        "hs": "hightScore",
+                        "lp": "loungePoint"
+                    }
                     tasks.append(makeimg(category, output_path))
                 await asyncio.gather(*tasks)
 

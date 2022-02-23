@@ -3,24 +3,35 @@ import json
 
 from PIL import Image, ImageDraw, ImageFont
 
-
 async def makeimg(category, path:str="image"):
-    def categories(category):
-        match category:
-            case "eventPoint":
-                return "PT榜"
-            case "highScore":
-                return "高分榜"
-            case "loungePoint":
-                return "廳榜"
+    # 縮寫類型轉譯
+    def fullform(abbreviation):
+        manifest = {
+            "pt": "eventPoint",
+            "hs": "highScore",
+            "lp": "loungePoint"
+        }
+        return manifest[abbreviation]
 
-    match category:
-        case "pt":
-            category = "eventPoint"
-        case "hs":
-            category = "highScore"
-        case "lp":
-            category = "loungePoint"
+    # 標題類型轉譯
+    def categories(category):
+        manifest = {
+            "eventPoint": "PT榜",
+            "highScore": "高分榜",
+            "loungePoint": "廳榜"
+        }
+        return manifest[category]
+
+    # 活動類型轉譯
+    def idtoname(typeid):
+        manifest = {
+            3:  "Theater",
+            4:  "Tour",
+            11: "Tune",
+            13: "Tale",
+            16: "Treasure"
+        }
+        return manifest[typeid]
 
     # 檔案設定
     with open("./config.json") as config:
@@ -43,19 +54,6 @@ async def makeimg(category, path:str="image"):
     endDate = eventData["schedule"]["endDate"]
     boostDate = eventData["schedule"]["boostBeginDate"]
     timeSummaries = borderData[category]["summaryTime"]
-
-    # 活動類型轉譯
-    match eventType:
-        case 3:
-            eventType = "Theater"
-        case 4:
-            eventType = "Tour"
-        case 11:
-            eventType = "Tune"
-        case 13:
-            eventType = "Tale"
-        case 16:
-            eventType = "Treasure"
 
     # 格式化日期
     beginDate = beginDate.replace("-", "/")[0:10]
@@ -101,7 +99,7 @@ async def makeimg(category, path:str="image"):
     draw.text((x_globe,105), f"活動期間：{beginDate} ~ {endDate} ({dayLength*24}小時)\n", (92, 103, 125), font=body)
     draw.text((x_globe,130), f"後半期間：{boostDate} ~ {endDate}\n", (92, 103, 125), font=body)
     draw.text((x_globe,155), f"剩下時間：{different_days:.2}天 ({int(different_hours)}小時)\n", (92, 103, 125), font=body)
-    draw.text((x_globe,180), f"榜線類型：{eventType} ({categories(category)})\n", (92, 103, 125), font=body)
+    draw.text((x_globe,180), f"榜線類型：{idtoname(eventType)} ({categories(category)})\n", (92, 103, 125), font=body)
     
     # 圖片排名產生
     try:
@@ -136,4 +134,4 @@ async def makeimg(category, path:str="image"):
         print(f"handling image: {categories(category)}.png")
         AnnaFrame.save(f"./{path}/{categories(category)}.png")
     except Exception as e:
-        print(f"makeimg: {e}")
+        print(f"error occure: {e}")
