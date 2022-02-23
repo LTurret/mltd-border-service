@@ -3,7 +3,6 @@ from datetime import datetime
 fetch_time = f"{datetime.now()}"
 
 async def GetNewestEvent(session):
-    print(f"fetching event id at: {fetch_time}")
     async with session.get("https://api.matsurihi.me/mltd/v1/events") as response:
         try:
             data = await response.json()
