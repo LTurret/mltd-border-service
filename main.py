@@ -82,13 +82,8 @@ async def main(datatype, output_path, checksum, dryrun, search_id):
                     os.mkdir(f"{output_path}")
 
                 tasks = []
-                for category in datatype:
-                    manifest = {
-                        "pt": "eventPoint",
-                        "hs": "highScore",
-                        "lp": "loungePoint"
-                    }
-                    tasks.append(makeimg(manifest[category], output_path))
+                for category in datatype: # abbreviation
+                    tasks.append(makeimg(category, output_path))
                 await asyncio.gather(*tasks)
 
 if __name__ == "__main__":

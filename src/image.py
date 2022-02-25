@@ -3,14 +3,17 @@ import datetime
 from PIL import Image, ImageFont, ImageDraw
 
 async def makeimg(category, path:str="image"):
+   
+    # 轉為中文
     def categories(category):
         manifest = {
-            "eventPoint": "PT榜",
-            "highScore": "高分榜",
-            "loungePoint": "廳榜"
+            "pt": "PT榜",
+            "hs": "高分榜",
+            "lp": "廳榜"
         }
         return manifest[category]
 
+    # 轉為全名
     def fullform(abbreviation):
         manifest = {
             "pt": "eventPoint",
@@ -50,7 +53,7 @@ async def makeimg(category, path:str="image"):
     beginDate = eventData["schedule"]["beginDate"]
     endDate = eventData["schedule"]["endDate"]
     boostDate = eventData["schedule"]["boostBeginDate"]
-    timeSummaries = borderData[category]["summaryTime"]
+    timeSummaries = borderData[fullform(category)]["summaryTime"]
 
     # 格式化日期
     beginDate = beginDate.replace("-", "/")[0:10]
@@ -129,7 +132,7 @@ async def makeimg(category, path:str="image"):
                 draw.text((x_globe + adjust_x + 30, y_globe),f"{score:,.0f}", (4, 102, 200), font=broadcasting)
                 y_globe += y_accumulate
                 length_adjust += 1
-        print(f"handling image: {categories(category)}.png")
+        print(f"generating image: {categories(category)}.png")
         AnnaFrame.save(f"./{path}/{categories(category)}.png")
     except Exception as e:
         print(e)
