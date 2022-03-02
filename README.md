@@ -20,6 +20,7 @@ options:
                         Select fetches border type
   --dryrun              Don't generate border-image and output folder to disk
   --checksum            Don't generate any file or folder, test API response
+  --static              Don't fetch any thing from internet, test image generator using pre-ready JSON file
 ```
 
 ## Option decription

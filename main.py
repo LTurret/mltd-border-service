@@ -27,66 +27,67 @@ parser.add_argument("-T", "--type", nargs="+", type=str, metavar="",
 group = parser.add_mutually_exclusive_group()
 group.add_argument("--dryrun",
                     action="store_true",
-                    help=f"Don't generate border-image and output folder to disk"
+                    help="Don't generate border-image and output folder to disk"
                 )
 group.add_argument("--checksum",
                     action="store_true",
-                    help=f"Don't generate any file or folder, test API response"
+                    help="Don't generate any file or folder, test API response"
                 )
+group.add_argument("--static",
+                    action="store_true",
+                    help="Used for debugging"
+)
 opt = parser.parse_args()
 
-async def main(datatype, output_path, checksum, dryrun, search_id):
+async def main(datatype, output_path, checksum, dryrun, static, search_id):
     def typematch(typeid:int):
         manifest = [3, 4, 11, 13, 16]
         return manifest.count(typeid)
 
-    async with aiohttp.ClientSession() as session:
-        if search_id:
-            eventData = await SearchEvent(search_id[0], session)
-            tasks = []
-            if (typematch(eventData["type"])):
-                tasks.append(asyncio.create_task(FetchBorder(search_id[0], session)))
-        else:
-            eventData = await GetNewestEvent(session)
-            evtID = eventData["id"]
-            tasks = []
-            if (typematch(eventData["type"])):
-                tasks.append(asyncio.create_task(FetchBorder(evtID, session)))
-        await asyncio.gather(*tasks)
-        information = eventData
-        if (typematch(eventData["type"])):
-            border = tasks[0].result()
-        print("fetch data complete.")
-
-        if checksum:
-            print("checksum complete.")
-            pass
-        else:
-            if not os.path.isdir("./dataset"):
-                os.mkdir("./dataset")
-            os.chdir("./dataset")
-            tasks = [
-                asyncio.create_task(makefile(information, "information"))
-            ]
-            if (typematch(eventData["type"])):
-                tasks.append(asyncio.create_task(makefile(border, "border")))
-            await asyncio.gather(*tasks)
-
-            if (dryrun or not(typematch(eventData["type"]))):
-                pass
-            else:
-                os.chdir("../")
-                if os.path.isdir(f"{output_path}"):
-                    pass
-                else:
-                    os.mkdir(f"{output_path}")
-
+    if not static:
+        async with aiohttp.ClientSession() as session:
+            if search_id:
+                eventData = await SearchEvent(search_id[0], session)
                 tasks = []
-                for category in datatype: # abbreviation
-                    tasks.append(makeimg(category, output_path))
-                await asyncio.gather(*tasks)
+                if typematch(eventData["type"]):
+                    tasks.append(asyncio.create_task(FetchBorder(search_id[0], session)))
+            else:
+                eventData = await GetNewestEvent(session)
+                eventID = eventData["id"]
+                tasks = []
+                if typematch(eventData["type"]):
+                    tasks.append(asyncio.create_task(FetchBorder(eventID, session)))
+            await asyncio.gather(*tasks)
+            if typematch(eventData["type"]):
+                border = tasks[0].result()
+            print("fetch data complete.")
+
+    if checksum:
+        print("checksum complete.")
+    else:
+        if not os.path.isdir("./dataset"):
+            os.mkdir("./dataset")
+        os.chdir("./dataset")
+        tasks = [
+            asyncio.create_task(makefile(eventData, "information"))
+        ]
+        if (typematch(eventData["type"])):
+            tasks.append(asyncio.create_task(makefile(border, "border")))
+        await asyncio.gather(*tasks)
+
+        if (not dryrun) or (not typematch(eventData["type"])):
+            os.chdir("../")
+            if not os.path.isdir(f"{output_path}"):
+                os.mkdir(f"{output_path}")
+
+            tasks = []
+            for category in datatype:
+                tasks.append(makeimg(category, output_path))
+            await asyncio.gather(*tasks)
+        elif dryrun:
+            print("dryrun complete.")
 
 if __name__ == "__main__":
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    loop.run_until_complete(main(opt.type, opt.output_path, opt.checksum, opt.dryrun, opt.search_id))
+    loop.run_until_complete(main(opt.type, opt.output_path, opt.checksum, opt.dryrun, opt.static, opt.search_id))
