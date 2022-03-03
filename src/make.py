@@ -6,5 +6,5 @@ async def makefile(file:json, filename:str):
             data = json.dump(file, data, indent=4, ensure_ascii=False)
     except Exception as e:
         print(f"issue occur: {e}")
-    finally:
+    else:
         print(f'file "{filename}.json" created.')

@@ -1,5 +1,3 @@
-from datetime import datetime
-
 async def GetNewestEvent(session):
     async with session.get("https://api.matsurihi.me/mltd/v1/events") as response:
         try:
