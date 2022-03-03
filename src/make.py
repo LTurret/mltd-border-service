@@ -8,6 +8,3 @@ async def makefile(file:json, filename:str):
         print(f"issue occur: {e}")
     finally:
         print(f'file "{filename}.json" created.')
-
-if __name__ == "__main__":
-    print('using "main.py" instead.')

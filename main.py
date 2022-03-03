@@ -71,21 +71,23 @@ async def main(datatype, output_path, checksum, dryrun, static, search_id):
         tasks = [
             asyncio.create_task(makefile(eventData, "information"))
         ]
-        if (typematch(eventData["type"])):
+        if typematch(eventData["type"]):
             tasks.append(asyncio.create_task(makefile(border, "border")))
         await asyncio.gather(*tasks)
+        os.chdir("../")
 
-        if (not dryrun) or (not typematch(eventData["type"])):
-            os.chdir("../")
-            if not os.path.isdir(f"{output_path}"):
-                os.mkdir(f"{output_path}")
+        if dryrun:
+            print("dryrun complete.")
+        #elif not typematch(eventData["type"]):
+        else:
+            if not os.path.isdir(output_path):
+                os.mkdir(output_path)
 
             tasks = []
             for category in datatype:
                 tasks.append(makeimg(category, output_path))
+            print("god tone")
             await asyncio.gather(*tasks)
-        elif dryrun:
-            print("dryrun complete.")
 
 if __name__ == "__main__":
     loop = asyncio.new_event_loop()

@@ -31,6 +31,3 @@ async def FetchCover(session, evtid):
                 file.write(await response.read())
         except Exception as e:
             print(f"exception occur: {e}")
-
-if __name__ == "__main__":
-    print('using "main.py" instead.')

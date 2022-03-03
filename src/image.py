@@ -119,23 +119,33 @@ async def makeimg(category, path:str="image"):
                 else:
                     argx = 0
 
-                draw.text(xy=(x_globe + argx, y_globe),
-                        text=f"{rank}",
-                        fill=(3, 83, 164),
-                        font=broadcasting
-                        )
-                draw.text(xy=(x_globe + 95, y_globe), text="位", fill=(3, 83, 164), font=broadcasting)
-                if (len(str(score)) == 8):
+                draw.text(
+                    xy=(x_globe + argx, y_globe),
+                    text=f"{rank}",
+                    fill=(3, 83, 164),
+                    font=broadcasting
+                )
+                draw.text(
+                    xy=(x_globe + 95, y_globe),
+                    text="位",
+                    fill=(3, 83, 164),
+                    font=broadcasting
+                )
+
+                if len(str(score)) == 8:
                     adjust_x = 176.8
-                elif (len(str(score)) == 7):
+                elif len(str(score)) == 7:
                     adjust_x = 194
-                draw.text((x_globe + adjust_x + 30, y_globe),f"{score:,.0f}", (4, 102, 200), font=broadcasting)
+
+                draw.text(
+                    xy=(x_globe + adjust_x + 30, y_globe),
+                    text=f"{score:,.0f}",
+                    fill=(4, 102, 200),
+                    font=broadcasting
+                )
                 y_globe += y_accumulate
                 length_adjust += 1
-        print(f"generating image: {categories(category)}.png")
+        print(f"makeimg: {categories(category)}.png")
         AnnaFrame.save(f"./{path}/{categories(category)}.png")
     except Exception as e:
-        print(e)
-
-if __name__ == "__main__":
-    print('using "main.py" instead.')
+        print(f"makeimg {e}")
