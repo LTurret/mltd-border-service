@@ -9,3 +9,5 @@ AnnaBorder-x64-win/config.json
 **/__pycache__
 image
 dataset
+
+**/build

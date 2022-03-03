@@ -36,6 +36,17 @@ options:
 
 `config.json`是 **活動資訊資料**, **排行資料**, **字體檔**, **背景圖** 的檔案位置設定檔，配合自訂義能夠方便管理檔案
 
+## 編譯
+
+所需函式庫：
+```console
+pyinstaller
+```
+建構發布：
+```
+$ pyinstaller -F main.py -i "icon.ico"
+```
+
 ## 授權
 
 遵守 [MIT](LICENSE)授權條款。

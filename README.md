@@ -36,6 +36,17 @@ it can enter multiple border types, generates more than one border-image
 
 `config.json` is **event informations data**, **border data**, **fonts**, **background** file location, with customization, convenient the file organization
 
+## Build
+
+require library:
+```console
+pyinstaller
+```
+to build release:
+```console
+$ pyinstaller -F main.py -i "icon.ico"
+```
+
 ## License
 
 Licensed under [MIT](LICENSE).
