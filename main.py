@@ -78,7 +78,6 @@ async def main(datatype, output_path, checksum, dryrun, static, search_id):
 
         if dryrun:
             print("dryrun complete.")
-        #elif not typematch(eventData["type"]):
         else:
             if not os.path.isdir(output_path):
                 os.mkdir(output_path)
@@ -86,7 +85,6 @@ async def main(datatype, output_path, checksum, dryrun, static, search_id):
             tasks = []
             for category in datatype:
                 tasks.append(makeimg(category, output_path))
-            print("god tone")
             await asyncio.gather(*tasks)
 
 if __name__ == "__main__":
