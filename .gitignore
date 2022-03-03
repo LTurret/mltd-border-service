@@ -1,13 +1,16 @@
 
-AnnaBorder-x64-win/AnnaBorder.exe
-AnnaBorder-x64-win/components/AnnaFrame.png
-AnnaBorder-x64-win/components/AnnaFrame.psd
-AnnaBorder-x64-win/components/ChiuKongGothic-CL-Regular.otf
-AnnaBorder-x64-win/components/jf-openhuninn-1.1.ttf
-AnnaBorder-x64-win/config.json
+AnnaBorder-x86-64-win
+AnnaBorder-x86-64-win/components
+AnnaBorder-x86-64-win/components/AnnaFrame.png
+AnnaBorder-x86-64-win/components/AnnaFrame.psd
+AnnaBorder-x86-64-win/components/ChiuKongGothic-CL-Regular.otf
+AnnaBorder-x86-64-win/components/jf-openhuninn-1.1.ttf
+AnnaBorder-x86-64-win/AnnaBorder.exe
+AnnaBorder-x86-64-win/config.json
 
 **/__pycache__
 image
 dataset
-
-**/build
+dist
+build
+main.spec
