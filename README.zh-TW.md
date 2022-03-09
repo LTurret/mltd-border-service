@@ -39,12 +39,15 @@ options:
 ## 編譯
 
 所需函式庫：
+
 ```console
 pyinstaller
 ```
+
 建構發布：
-```
-$ pyinstaller -F main.py -i "icon.ico"
+
+```console
+pyinstaller -F main.py -i "icon.ico"
 ```
 
 ## 授權

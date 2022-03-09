@@ -20,7 +20,7 @@ options:
                         Select fetches border type
   --dryrun              Don't generate border-image and output folder to disk
   --checksum            Don't generate any file or folder, test API response
-  --static              Don't fetch any thing from internet, test image generator using pre-ready JSON file
+  --static              Don't fetch any thing from internet, test image generate with existing JSON file
 ```
 
 ## Option decription
@@ -39,12 +39,15 @@ it can enter multiple border types, generates more than one border-image
 ## Build
 
 require library:
+
 ```console
 pyinstaller
 ```
+
 to build release:
+
 ```console
-$ pyinstaller -F main.py -i "icon.ico"
+pyinstaller -F main.py -i "icon.ico"
 ```
 
 ## License
