@@ -47,7 +47,7 @@ pyinstaller
 to build release:
 
 ```console
-pyinstaller -F main.py -i "icon.ico"
+$ pyinstaller -F "main.py" -i "icon.ico"
 ```
 
 ## License
