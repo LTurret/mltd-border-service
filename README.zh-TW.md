@@ -47,7 +47,7 @@ pyinstaller
 建構發布：
 
 ```console
-pyinstaller -F main.py -i "icon.ico"
+$ pyinstaller -F "main.py" -i "icon.ico"
 ```
 
 ## 授權
