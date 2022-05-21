@@ -38,13 +38,22 @@ it can enter multiple border types, generates more than one border-image
 
 ## Build
 
-require library:
+For program library:
+
+```console
+aiohttp
+argparse
+asyncio
+PIL
+```
+
+For production library:
 
 ```console
 pyinstaller
 ```
 
-to build release:
+Build args example:
 
 ```console
 pyinstaller -F main.py -i "icon.ico"
@@ -54,7 +63,7 @@ pyinstaller -F main.py -i "icon.ico"
 
 Licensed under [MIT](LICENSE).
 
+The copyright of any characters in the image(includes .psd, .png) belongs to [Bandai Namco Entertainment](https://www.bandainamcoent.co.jp/).  
 All the event information is provided by [api.matsurihi.me](https://api.matsurihi.me/docs/)  
-The copyright of any characters in the image(includes .psd, .png) belongs to Bandai Namco Entertainment.  
 Font used in the image title is [ChiuKong Gothic](https://github.com/ChiuMing-Neko/ChiuKongGothic)  
 Font used in the image body is [jf open 粉圓](https://github.com/justfont/open-huninn-font)  
