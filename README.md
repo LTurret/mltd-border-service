@@ -56,7 +56,7 @@ pyinstaller
 Build args example:
 
 ```console
-$ pyinstaller -F "main.py" -i "icon.ico"
+pyinstaller -F "main.py" -i "icon.ico"
 ```
 
 ## License
