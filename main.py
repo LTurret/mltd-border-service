@@ -3,7 +3,8 @@ import argparse
 import asyncio
 import os
 
-from src.fetch import GetNewestEvent, SearchEvent, FetchBorder, FetchCover
+from src.fetch import GetNewestEvent, SearchEvent, FetchBorder
+# FetchCover is future fucntion
 from src.make import makefile
 from src.image import makeimg
 
@@ -49,7 +50,7 @@ async def main(datatype, output_path, checksum, dryrun, static, search_id):
             if search_id:
                 eventData = await SearchEvent(search_id[0], session)
                 tasks = []
-                if typematch(eventData["type"]):
+                if typematch(eventData["type"]) is not None:
                     tasks.append(asyncio.create_task(FetchBorder(search_id[0], session)))
             else:
                 eventData = await GetNewestEvent(session)
