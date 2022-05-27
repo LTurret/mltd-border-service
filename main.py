@@ -44,6 +44,9 @@ async def main(datatype, output_path, checksum, dryrun, static, search_id):
     def typematch(typeid:int):
         manifest = [3, 4, 11, 13, 16]
         return manifest.count(typeid)
+    
+    eventData = {}
+    border = None
 
     if not static:
         async with aiohttp.ClientSession() as session:
