@@ -1,4 +1,4 @@
-async def GetNewestEvent(session):
+async def GetNewest(session):
     async with session.get("https://api.matsurihi.me/mltd/v1/events") as response:
         try:
             data = await response.json()
@@ -6,7 +6,7 @@ async def GetNewestEvent(session):
         except Exception as e:
             print(f"exception occur: {e}")
 
-async def SearchEvent(evtid, session):
+async def Search(evtid, session):
     async with session.get(f"https://api.matsurihi.me/mltd/v1/events/{evtid}") as response:
         try:
             data = await response.json()

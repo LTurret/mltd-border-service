@@ -3,7 +3,7 @@ import argparse
 import asyncio
 import os
 
-from src.fetch import GetNewestEvent, SearchEvent, FetchBorder, FetchCover
+from src.fetch import GetNewest, Search, FetchBorder, FetchCover
 from src.make import makefile
 from src.image import makeimg
 
@@ -15,7 +15,7 @@ parser.add_argument("-O", "--output_path", nargs=1, type=str, metavar="",
                     default="image",
                     help='Image generate ouput path, default is "./image"'
                 )
-parser.add_argument("-S", "--search_id", nargs=1, type=int, metavar="",
+parser.add_argument("-I", "--identify", nargs=1, type=int, metavar="",
                     required=False,
                     help="Search specific event with unique ID"
                 )
@@ -39,26 +39,31 @@ group.add_argument("--static",
 )
 opt = parser.parse_args()
 
-async def main(datatype, output_path, checksum, dryrun, static, search_id):
-    def typematch(typeid:int):
-        manifest = [3, 4, 11, 13, 16]
-        return manifest.count(typeid)
+async def main(output_type:list, output_path:str, checksum:bool=False, dryrun:bool=False, static:bool=False, identify:int=None):
+
+    check_identified = lambda identify: True if (identify is not None and type(identify) is int and identify > 0) else 1
+    identify_maximun = lambda identify, idmax: True if (identify is not None and identify > idmax) else 2
+    matchtype = lambda typecode: ([3, 4, 5, 11, 13, 16].count(typecode)) == 1
+
+    tasks = []
+    announcement = ""
 
     if not static:
         async with aiohttp.ClientSession() as session:
-            if search_id:
-                eventData = await SearchEvent(search_id[0], session)
-                tasks = []
-                if typematch(eventData["type"]):
-                    tasks.append(asyncio.create_task(FetchBorder(search_id[0], session)))
+            eventdata = await GetNewest(session)
+            identify = eventdata["id"]
+
+            if check_identified(identify):
+                if matchtype(eventdata["type"]):
+                    tasks.append(asyncio.create_task(FetchBorder(identify, session)))
+                else:
+                    announcement = "This event is inborderable."
             else:
-                eventData = await GetNewestEvent(session)
-                eventID = eventData["id"]
-                tasks = []
-                if typematch(eventData["type"]):
-                    tasks.append(asyncio.create_task(FetchBorder(eventID, session)))
+                identify = eventdata["id"]
+                if matchtype(eventdata["type"]):
+                    tasks.append(asyncio.create_task(FetchBorder(identify, session)))
             await asyncio.gather(*tasks)
-            if typematch(eventData["type"]):
+            if matchtype(eventdata["type"]):
                 border = tasks[0].result()
             print("fetch data complete.")
 
@@ -69,9 +74,9 @@ async def main(datatype, output_path, checksum, dryrun, static, search_id):
             os.mkdir("./dataset")
         os.chdir("./dataset")
         tasks = [
-            asyncio.create_task(makefile(eventData, "information"))
+            asyncio.create_task(makefile(eventdata, "information"))
         ]
-        if typematch(eventData["type"]):
+        if matchtype(eventdata["type"]):
             tasks.append(asyncio.create_task(makefile(border, "border")))
         await asyncio.gather(*tasks)
         os.chdir("../")
@@ -83,11 +88,11 @@ async def main(datatype, output_path, checksum, dryrun, static, search_id):
                 os.mkdir(output_path)
 
             tasks = []
-            for category in datatype:
+            for category in output_type:
                 tasks.append(makeimg(category, output_path))
             await asyncio.gather(*tasks)
 
 if __name__ == "__main__":
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    loop.run_until_complete(main(opt.type, opt.output_path, opt.checksum, opt.dryrun, opt.static, opt.search_id))
+    loop.run_until_complete(main(opt.output_type, opt.output_path, opt.checksum, opt.dryrun, opt.static, opt.search_id))
