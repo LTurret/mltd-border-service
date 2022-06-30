@@ -3,7 +3,7 @@ import datetime
 from PIL import Image, ImageFont, ImageDraw
 
 async def makeimg(category, path:str="image"):
-   
+
     # 轉為中文
     def categories(category):
         manifest = {
@@ -27,6 +27,7 @@ async def makeimg(category, path:str="image"):
         manifest = {
             3:  "Theater",
             4:  "Tour",
+            5:  "Anniversary",
             11: "Tune",
             13: "Tale",
             16: "Treasure"
@@ -65,11 +66,17 @@ async def makeimg(category, path:str="image"):
     # 活動天數
     formatedBD = datetime.date(int(beginDate[0:4]), int(beginDate[5:7]), int(beginDate[8:10]))
     formatedED = datetime.date(int(endDate[0:4]), int(endDate[5:7]), int(endDate[8:10]))
-    dayLength = (formatedED - formatedBD).days
+    if eventType == 5:
+        dayLength = (formatedED - formatedBD).days + 1
+    else:
+        dayLength = (formatedED - formatedBD).days
 
     # 新增台灣時間，方便觀察
-    current_time = datetime.datetime(2022, 1, 23, 15, 31, 0, 0)
-    end_time = datetime.datetime(int(endDate[0:4]), int(endDate[5:7]), int(endDate[8:10]), 19, 59, 59, 0)
+    current_time = datetime.datetime.now()
+    if eventType == 5:
+        end_time = datetime.datetime(int(endDate[0:4]), int(endDate[5:7]), int(endDate[8:10]), 22, 59, 59, 0)
+    else:
+        end_time = datetime.datetime(int(endDate[0:4]), int(endDate[5:7]), int(endDate[8:10]), 19, 59, 59, 0)
     different_time = end_time - current_time
     different_hours = different_time.total_seconds() / 3600
     different_days = different_hours / 24
@@ -99,23 +106,25 @@ async def makeimg(category, path:str="image"):
     draw.text((x_globe,70), f"資料時間：{time_date} ({progress:.1%})\n", (0, 40, 85), font=fetchtime)
     draw.text((x_globe,105), f"活動期間：{beginDate} ~ {endDate} ({dayLength*24}小時)\n", (92, 103, 125), font=body)
     draw.text((x_globe,130), f"後半期間：{boostDate} ~ {endDate}\n", (92, 103, 125), font=body)
-    draw.text((x_globe,155), f"剩下時間：{different_days:.2}天 ({int(different_hours)}小時)\n", (92, 103, 125), font=body)
+    draw.text((x_globe,155), f"剩下時間：{different_days:.2f}天 ({int(different_hours)}小時)\n", (92, 103, 125), font=body)
     draw.text((x_globe,180), f"榜線類型：{idtostring(eventType)} ({categories(category)})\n", (92, 103, 125), font=body)
-    
+
     # 圖片排名產生
     try:
         for data in borderData[fullform(category)]["scores"]:
             rank = data["rank"]
             score = data["score"]
             if score is not None:
-                if (length_adjust <= 3):
-                    argx = 73
-                elif (length_adjust == 4):
-                    argx = 36
-                elif (length_adjust > 4 and length_adjust < 7):
-                    argx = 18
-                elif (length_adjust > 9):
+                if (length_adjust > 9):
                     break
+                elif (len(str(rank)) == 1):
+                    argx = 73
+                elif (len(str(rank)) == 2):
+                    argx = 54
+                elif (len(str(rank)) == 3):
+                    argx = 36
+                elif (len(str(rank)) == 4):
+                    argx = 18
                 else:
                     argx = 0
 
@@ -136,6 +145,8 @@ async def makeimg(category, path:str="image"):
                     adjust_x = 176.8
                 elif len(str(score)) == 7:
                     adjust_x = 194
+                elif len(str(score)) == 6:
+                    adjust_x = 211.2
 
                 draw.text(
                     xy=(x_globe + adjust_x + 30, y_globe),
