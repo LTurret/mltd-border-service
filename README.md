@@ -38,24 +38,24 @@ it can enter multiple border types, generates more than one border-image
 
 ## Build
 
-For program library:
+Developing libraries:
 
-```console
+```shell
 aiohttp
 argparse
 asyncio
 PIL
 ```
 
-For production library:
+For packaging library:
 
-```console
+```shell
 pyinstaller
 ```
 
-Build args example:
+Example prefix and parameters:
 
-```console
+```shell
 pyinstaller -F "main.py" -i "icon.ico"
 ```
 
