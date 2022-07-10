@@ -48,6 +48,9 @@ async def main(output_type:list, output_path:str, checksum:bool=False, dryrun:bo
     tasks = []
     announcement = ""
 
+    eventData = {}
+    border = None
+
     if not static:
         async with aiohttp.ClientSession() as session:
             eventdata = await GetNewest(session)

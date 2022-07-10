@@ -1,6 +1,6 @@
 import json
 
-async def makefile(file:json, filename:str):
+async def makefile(file:list, filename:str):
     try:
         with open(f"{filename}.json", mode="w", encoding="utf-8") as data:
             data = json.dump(file, data, indent=4, ensure_ascii=False)
