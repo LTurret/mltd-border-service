@@ -42,16 +42,15 @@ opt = parser.parse_args()
 async def main(output_type: list = ["pt"], output_path: str = "./image", checksum: bool = False, dryrun: bool = False, static: bool = False, identify = None):
 
     check_identified = lambda identify: True if (identify is not None and type(identify) is int and identify > 0) else False
-    identify_maximun = lambda identify, idmax: True if (identify is not None and identify > idmax) else 2
+    # identify_maximun = lambda identify, idmax: True if (identify is not None and identify > idmax) else 2
     matchtype = lambda typecode: ([3, 4, 5, 11, 13, 16].count(typecode)) == 1
     border_exists = lambda file: True if (len(file) > 0) else False
 
     identify = identify[0]
-    tasks = []
     announcement = ""
-
-    eventData = {}
-    border = None
+    border_data = None
+    event_data = {}
+    tasks = []
 
     if not static:
         async with aiohttp.ClientSession() as session:
