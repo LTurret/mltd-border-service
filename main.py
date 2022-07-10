@@ -20,9 +20,10 @@ parser.add_argument("-I", "--identify", nargs=1, type=int, metavar="",
                     help="Search specific event with unique ID"
                 )
 parser.add_argument("-T", "--type", nargs="+", type=str, metavar="",
-                    required=True,
+                    required=False,
                     help="Select fetches border type",
-                    choices=["pt", "hs", "lp"]
+                    choices=["pt", "hs", "lp"],
+                    default=["pt"]
                 )
 group = parser.add_mutually_exclusive_group()
 group.add_argument("--dryrun",
@@ -39,14 +40,13 @@ group.add_argument("--static",
 )
 opt = parser.parse_args()
 
-async def main(output_type: list = ["pt"], output_path: str = "./image", checksum: bool = False, dryrun: bool = False, static: bool = False, identify = None):
+async def main(output_type, output_path, checksum, dryrun, static, identify):
 
     check_identified = lambda identify: True if (identify is not None and type(identify) is int and identify > 0) else False
     # identify_maximun = lambda identify, idmax: True if (identify is not None and identify > idmax) else 2
     matchtype = lambda typecode: ([3, 4, 5, 11, 13, 16].count(typecode)) == 1
     border_exists = lambda file: True if (len(file) > 0) else False
 
-    identify = identify[0]
     announcement = ""
     border_data = None
     event_data = {}
@@ -58,7 +58,6 @@ async def main(output_type: list = ["pt"], output_path: str = "./image", checksu
 
             if check_identified(identify):
                 event_data = await Search(identify, session)
-                print("fuck")
             else:
                 identify = event_data["id"]
 
