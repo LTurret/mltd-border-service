@@ -50,6 +50,9 @@ async def main(output_type: list = ["pt"], output_path: str = "./image", checksu
     tasks = []
     announcement = ""
 
+    eventData = {}
+    border = None
+
     if not static:
         async with aiohttp.ClientSession() as session:
             event_data = await GetNewest(session)
