@@ -66,4 +66,5 @@ Licensed under [MIT](LICENSE).
 The copyright of any characters in the image(includes .psd, .png) belongs to [Bandai Namco Entertainment](https://www.bandainamcoent.co.jp/).  
 All the event information is provided by [api.matsurihi.me](https://api.matsurihi.me/docs/)  
 Font used in the image title is [ChiuKong Gothic](https://github.com/ChiuMing-Neko/ChiuKongGothic)  
-Font used in the image body is [jf open 粉圓](https://github.com/justfont/open-huninn-font)  
+Font used in the image subtitles are [jf open 粉圓](https://github.com/justfont/open-huninn-font)  
+Font used in the image body is [FiraCode](https://github.com/tonsky/FiraCode)

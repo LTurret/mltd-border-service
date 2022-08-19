@@ -1,7 +1,9 @@
 {
-    "data_broadcasting": "./dataset/border.json",
+    "border_data": "./dataset/border.json",
     "data_eventinfo": "./dataset/information.json",
     "background": "./components/AnnaFrame.png",
-    "font_filepath": "./components/jf-openhuninn-1.1.ttf",
-    "title_font_filepath": "./components/ChiuKongGothic-CL-Regular.otf"
+    "font_event_title":"./components/ChiuKongGothic-CL-Regular.otf" ,
+    "font_data_title": "./components/jf-openhuninn-1.1.ttf",
+    "font_subtitle": "./components/jf-openhuninn-1.1.ttf",
+    "font_body": "./components/FiraCode-Regular.ttf"
 }

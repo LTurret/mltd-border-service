@@ -46,6 +46,7 @@ async def main(output_type, output_path, checksum, dryrun, static, identify):
     # identify_maximun = lambda identify, idmax: True if (identify is not None and identify > idmax) else 2
     matchtype = lambda typecode: ([3, 4, 5, 11, 13, 16].count(typecode)) == 1
     border_exists = lambda file: True if (len(file) > 0) else False
+    early_announcement = lambda message: True if (len(message) > 0) else False
 
     announcement = ""
     border_data = None
@@ -56,10 +57,10 @@ async def main(output_type, output_path, checksum, dryrun, static, identify):
         async with aiohttp.ClientSession() as session:
             event_data = await GetNewest(session)
 
-            if check_identified(identify):
-                event_data = await Search(identify, session)
-            else:
-                identify = event_data["id"]
+            if check_identified(identify[0]):
+                event_data = await Search(identify[0], session)
+
+            identify = event_data["id"]
 
             if matchtype(event_data["type"]):
                 border_data = await FetchBorder(identify, session)
@@ -68,6 +69,8 @@ async def main(output_type, output_path, checksum, dryrun, static, identify):
 
     if checksum:
         announcement = "checksum complete."
+    elif early_announcement(announcement):
+        pass
     else:
 
         if not os.path.isdir("./dataset"):
