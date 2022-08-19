@@ -69,11 +69,11 @@ async def makeimg(category, path:str="image"):
 
     # Remaining days ("BD" = "Begin Date", "ED" = "End Date")
     if eventType == 5:
-        formatedBD = datetime.datetime(int(beginDate[0:4]), int(beginDate[5:7]), int(beginDate[8:10]), 15, 0, 0)
-        formatedED = datetime.datetime(int(endDate[0:4]), int(endDate[5:7]), int(endDate[8:10]), 20, 59, 59)
-    else:
         formatedBD = datetime.datetime(int(beginDate[0:4]), int(beginDate[5:7]), int(beginDate[8:10]), 0, 0, 0)
         formatedED = datetime.datetime(int(endDate[0:4]), int(endDate[5:7]), int(endDate[8:10]), 23, 59, 59)
+    else:
+        formatedBD = datetime.datetime(int(beginDate[0:4]), int(beginDate[5:7]), int(beginDate[8:10]), 15, 0, 0)
+        formatedED = datetime.datetime(int(endDate[0:4]), int(endDate[5:7]), int(endDate[8:10]), 21, 0, 0)
 
     length_of_hours = (formatedED - formatedBD).days * 24 + (formatedED - formatedBD).seconds / 3600
     length_of_days = length_of_hours / 24
