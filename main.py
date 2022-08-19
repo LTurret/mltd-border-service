@@ -1,6 +1,7 @@
 import aiohttp
 import argparse
 import asyncio
+import json
 import os
 
 from src.fetch import GetNewest, Search, FetchBorder, FetchCover
@@ -29,15 +30,15 @@ parser.add_argument("-T", "--type", nargs="+", type=str, metavar="",
 group = parser.add_mutually_exclusive_group()
 group.add_argument("--dryrun",
                     action="store_true",
-                    help="Don't generate border-image and output folder to disk"
+                    help="Not generates image but generates dataset, fetching dataset from API, used for testing dataset"
                 )
 group.add_argument("--checksum",
                     action="store_true",
-                    help="Don't generate any file or folder, test API response"
+                    help="Not generates image and dataset, used for testing API correspondence"
                 )
 group.add_argument("--static",
                     action="store_true",
-                    help="Used for debugging"
+                    help="Not generates dataset but generates image using local dataset, will not fetching from API"
 )
 opt = parser.parse_args()
 
@@ -67,6 +68,11 @@ async def main(output_type, output_path, checksum, dryrun, static, identify):
                 border_data = await FetchBorder(identify, session)
             else:
                 announcement = "This is an inborderable event."
+    else:
+        with open("./dataset/information.json", "r", encoding="utf-8") as information:
+            event_data = json.load(information)
+        with open("./dataset/border.json", "r", encoding="utf-8") as border:
+            border_data = json.load(border)
 
     if checksum:
         announcement = "checksum complete."

@@ -8,19 +8,19 @@
 
 ```console
 $ ./AnnaBorder --help
-usage: AnnaBorder.exe [-h] [-O] [-S] -T  [...] [--dryrun | --checksum]
+usage: AnnaBorder.exe [-h] [-O] [-I] [-T  [...]] [--dryrun | --checksum | --static]
 
 可以抓取當前活動資訊以及輸出排行圖片的產生器
 
-options:
+選擇性參數:
   -h, --help            顯示幫助說明
   -O , --output_path    圖片輸出路徑，預設為 "./image"
   -S , --search_id      使用獨立ID搜尋特定的活動
   -T  [ ...], --type  [ ...]
                         選擇欲抓取的活動類型
-  --dryrun              不輸出排行圖片或輸出資料夾
-  --checksum            不輸出任何檔案或資料夾，測試API
-  --static              不擷取網路資源，使用預置JSON測試圖片輸出
+  --dryrun              不輸出圖片，輸出資料集，用於測試資料集
+  --checksum            不輸出圖片或資料集，用於測試API回應關係
+  --static              不輸出資料集，但是會使用預置資料集輸出圖片，不會從API擷取資料
 ```
 
 ## 選項說明
@@ -67,4 +67,3 @@ pyinstaller -F "main.py" -i "icon.ico"
 出現在影像中的任何角色(包括.psd、.png)版權皆屬於萬代南夢宮娛樂所有  
 字體使用於圖片標題為[秋空黑體](https://github.com/ChiuMing-Neko/ChiuKongGothic)  
 字體使用於圖片子標題為[jf open 粉圓](https://github.com/justfont/open-huninn-font)  
-字體使用於圖片內容為[FiraCode](https://github.com/tonsky/FiraCode)

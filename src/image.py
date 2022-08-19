@@ -46,7 +46,6 @@ async def makeimg(category, path:str="image"):
         font_event_title = config["font_event_title"]
         font_data_title = config["font_data_title"]
         font_subtitle = config["font_subtitle"]
-        font_body = config["font_body"]
 
     with open(border_data, mode="r", encoding='utf8') as file:
         borderData = json.load(file)
@@ -69,13 +68,15 @@ async def makeimg(category, path:str="image"):
     time_date += f" {timeSummaries[11:16]}"
 
     # Remaining days ("BD" = "Begin Date", "ED" = "End Date")
-    formatedBD = datetime.date(int(beginDate[0:4]), int(beginDate[5:7]), int(beginDate[8:10]))
-    formatedED = datetime.date(int(endDate[0:4]), int(endDate[5:7]), int(endDate[8:10]))
-
     if eventType == 5:
-        dayLength = (formatedED - formatedBD).days + 1
+        formatedBD = datetime.datetime(int(beginDate[0:4]), int(beginDate[5:7]), int(beginDate[8:10]), 15, 0, 0)
+        formatedED = datetime.datetime(int(endDate[0:4]), int(endDate[5:7]), int(endDate[8:10]), 20, 59, 59)
     else:
-        dayLength = (formatedED - formatedBD).days
+        formatedBD = datetime.datetime(int(beginDate[0:4]), int(beginDate[5:7]), int(beginDate[8:10]), 0, 0, 0)
+        formatedED = datetime.datetime(int(endDate[0:4]), int(endDate[5:7]), int(endDate[8:10]), 23, 59, 59)
+
+    length_of_hours = (formatedED - formatedBD).days * 24 + (formatedED - formatedBD).seconds / 3600
+    length_of_days = length_of_hours / 24
 
     # Configure current time with Japan Standard Time(GMT+9)
     current_time = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
@@ -83,14 +84,15 @@ async def makeimg(category, path:str="image"):
 
     # Special case for Annivaersary
     if eventType == 5:
-        end_time = datetime.datetime(int(endDate[0:4]), int(endDate[5:7]), int(endDate[8:10]), 22, 59, 59, 0, tzinfo=datetime.timezone.utc)
+        end_time = datetime.datetime(int(endDate[0:4]), int(endDate[5:7]), int(endDate[8:10]), 23, 59, 59, 0, tzinfo=datetime.timezone(datetime.timedelta(hours=9)))
     else:
-        end_time = datetime.datetime(int(endDate[0:4]), int(endDate[5:7]), int(endDate[8:10]), 19, 59, 59, 0, tzinfo=datetime.timezone.utc)
+        end_time = datetime.datetime(int(endDate[0:4]), int(endDate[5:7]), int(endDate[8:10]), 21, 00, 00, 0, tzinfo=datetime.timezone(datetime.timedelta(hours=9)))
     
     different_time = end_time - current_time
     different_hours = different_time.total_seconds() / 3600
     different_days = different_hours / 24
-    total_hours = dayLength * 24
+
+    total_hours = length_of_days * 24
     progress = (total_hours-different_hours) / total_hours
 
     # Pillow 畫布設定
@@ -99,58 +101,54 @@ async def makeimg(category, path:str="image"):
     draw = ImageDraw.Draw(frame)
 
     # Pillow 設定
+    score_x = 0
     y_globe = 290
-    y_accumulate = 40
     x_globe = 40
-    length_adjust = 1
-    adjust_x = 150
 
     # 字型設定
     event_title = ImageFont.truetype(font_event_title, 27)
     data_title = ImageFont.truetype(font_data_title, 25)
     subtitle = ImageFont.truetype(font_subtitle, 20)
-    body = ImageFont.truetype(font_body, 30)
     interval = ImageFont.truetype(font_subtitle, 30)
 
     # 圖片資訊產生
-    draw.text((x_globe,28), f"{eventName}", (2, 62, 125), font=event_title)
+    draw.text((x_globe, 28), f"{eventName}", (2, 62, 125), font=event_title)
 
     if progress >= 100:
-        draw.text((x_globe,70), f"資料時間：{time_date} (100%)\n", (0, 40, 85), font=data_title)
+        draw.text((x_globe, 70), f"資料時間：{time_date} (100%)\n", (0, 40, 85), font=data_title)
     else:
-        draw.text((x_globe,70), f"資料時間：{time_date} ({progress:.1%})\n", (0, 40, 85), font=data_title)
+        draw.text((x_globe, 70), f"資料時間：{time_date} ({progress:.2%})\n", (0, 40, 85), font=data_title)
 
-    draw.text((x_globe,105), f"活動期間：{beginDate} ~ {endDate} ({dayLength*24}小時)\n", (92, 103, 125), font=subtitle)
-    draw.text((x_globe,130), f"後半期間：{boostDate} ~ {endDate}\n", (92, 103, 125), font=subtitle)
+    draw.text((x_globe, 105), f"活動期間：{beginDate} ~ {endDate} ({int(total_hours)}小時)\n", (92, 103, 125), font=subtitle)
+    draw.text((x_globe, 130), f"後半期間：{boostDate} ~ {endDate}\n", (92, 103, 125), font=subtitle)
 
     if different_days <= 0:
-        draw.text((x_globe,155), f"剩下時間：已經結束囉～\n", (92, 103, 125), font=subtitle)
+        draw.text((x_globe, 155), f"剩下時間：已經結束囉～\n", (92, 103, 125), font=subtitle)
     else:
-        draw.text((x_globe,155), f"剩下時間：{different_days:.2f}天 ({int(different_hours)}小時)\n", (92, 103, 125), font=subtitle)
+        draw.text((x_globe, 155), f"剩下時間：{different_days:.2f}天 ({different_hours:.1f}小時)\n", (92, 103, 125), font=subtitle)
 
-    draw.text((x_globe,180), f"榜線類型：{idtostring(eventType)} ({categories(category)})\n", (92, 103, 125), font=subtitle)
+    draw.text((x_globe, 180), f"榜線類型：{idtostring(eventType)} ({categories(category)})\n", (92, 103, 125), font=subtitle)
 
     # 圖片排名產生
     for data in borderData[fullform(category)]["scores"]:
         rank = data["rank"]
         score = data["score"]
+
         if score is not None:
-            if (length_adjust > 9):
-                break
-            elif (len(str(rank)) == 1):
+            if (len(str(rank)) == 1):
                 argx = 73
             elif (len(str(rank)) == 2):
                 argx = 54
             elif (len(str(rank)) == 3):
-                argx = 36
+                argx = 38
             elif (len(str(rank)) == 4):
-                argx = 18
+                argx = 12
             else:
-                argx = 0
+                argx = -6
 
             draw.text(
                 xy=(x_globe + argx, y_globe),
-                text=f"{rank}",
+                text=f"{rank:,.0f}",
                 fill=(3, 83, 164),
                 font=interval
             )
@@ -161,20 +159,27 @@ async def makeimg(category, path:str="image"):
                 font=interval
             )
 
-            if len(str(score)) == 8:
-                adjust_x = 186.8
+            if len(str(score)) == 9:
+                score_x = 230
+            elif len(str(score)) == 8:
+                score_x = 256.8
             elif len(str(score)) == 7:
-                adjust_x = 204
+                score_x = 274
             elif len(str(score)) == 6:
-                adjust_x = 211.2
+                score_x = 293
+            elif len(str(score)) == 5:
+                score_x = 319
+            elif len(str(score)) == 4:
+                score_x = 337
 
             draw.text(
-                xy=(x_globe + adjust_x + 30, y_globe),
+                xy=(score_x, y_globe),
                 text=f"{score:,.0f}",
                 fill=(4, 102, 200),
-                font=body
+                font=interval
             )
-            y_globe += y_accumulate
-            length_adjust += 1
+
+            y_globe += 40
+
     print(f"Generating border image: ./{path}/{categories(category)}.png")
     frame.save(f"./{path}/{categories(category)}.png")
