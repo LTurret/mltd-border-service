@@ -66,4 +66,5 @@ pyinstaller -F "main.py" -i "icon.ico"
 所有的活動資訊皆由[api.matsurihi.me](https://api.matsurihi.me/docs/)提供  
 出現在影像中的任何角色(包括.psd、.png)版權皆屬於萬代南夢宮娛樂所有  
 字體使用於圖片標題為[秋空黑體](https://github.com/ChiuMing-Neko/ChiuKongGothic)  
-字體使用於圖片內容為[jf open 粉圓](https://github.com/justfont/open-huninn-font)  
+字體使用於圖片子標題為[jf open 粉圓](https://github.com/justfont/open-huninn-font)  
+字體使用於圖片內容為[FiraCode](https://github.com/tonsky/FiraCode)
