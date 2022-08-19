@@ -17,6 +17,7 @@ parser.add_argument("-O", "--output_path", nargs=1, type=str, metavar="",
                 )
 parser.add_argument("-I", "--identify", nargs=1, type=int, metavar="",
                     required=False,
+                    default=[0],
                     help="Search specific event with unique ID"
                 )
 parser.add_argument("-T", "--type", nargs="+", type=str, metavar="",
