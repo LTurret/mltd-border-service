@@ -77,7 +77,7 @@ async def makeimg(category, path:str="image"):
     interval = ImageFont.truetype(font_subtitle, 30)
 
     # Image informations processing
-    progress_overflow = lambda progress: f"資料時間：{update_time} (100%)\n" if (progress >= 100) else f"資料時間：{update_time} ({progress:.2%})\n"
+    progress_overflow = lambda progress: f"資料時間：{update_time} (100%)\n" if (progress >= 1.0) else f"資料時間：{update_time} ({progress:.2%})\n"
     event_ended = lambda difference_days: f"剩下時間：已經結束囉～\n" if (difference_days <= 0) else f"剩下時間：{difference_days:.2f}天 ({difference_hours:.1f}小時)\n"
     draw.text((x_globe, 28), f"{event_name}", (2, 62, 125), font=event_title)
     draw.text((x_globe, 70), progress_overflow(progress), (0, 40, 85), font=data_title)
@@ -116,7 +116,9 @@ async def makeimg(category, path:str="image"):
                 font=interval
             )
 
-            if len(str(score)) == 9:
+            if len(str(score)) == 10:
+                score_x = 210
+            elif len(str(score)) == 9:
                 score_x = 230
             elif len(str(score)) == 8:
                 score_x = 256.8

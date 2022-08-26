@@ -1,6 +1,6 @@
 {
-    "border_data": "./dataset/border.json",
-    "data_eventinfo": "./dataset/information.json",
+    "border_data": "./data/border.json",
+    "data_eventinfo": "./data/information.json",
     "background": "./components/AnnaFrame.png",
     "font_event_title":"./components/ChiuKongGothic-CL-Regular.otf" ,
     "font_data_title": "./components/jf-openhuninn-1.1.ttf",

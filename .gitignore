@@ -10,7 +10,7 @@ AnnaBorder_v1.1.0-x86-64-win/config.json
 
 **/__pycache__
 image
-dataset
+data
 dist
 build
 main.spec

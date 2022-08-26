@@ -80,10 +80,10 @@ async def main(output_type, output_path, checksum, dryrun, static, identify):
         pass
     else:
 
-        if not os.path.isdir("./dataset"):
-            os.mkdir("./dataset")
+        if not os.path.isdir("./data"):
+            os.mkdir("./data")
 
-        os.chdir("./dataset")
+        os.chdir("./data")
         tasks = [
             asyncio.create_task(makefile(event_data, "information"))
         ]
