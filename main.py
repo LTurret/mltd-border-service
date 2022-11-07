@@ -16,16 +16,21 @@ parser.add_argument("-O", "--output_path", nargs=1, type=str, metavar="",
                     default="image",
                     help='Image generate output path, default is "./image"'
                 )
+parser.add_argument("-T", "--output_type", nargs="+", type=str, metavar="",
+                    required=False,
+                    help="Select fetches border type",
+                    choices=["pt", "hs", "lp"],
+                    default=["pt"]
+                )
 parser.add_argument("-I", "--identify", nargs=1, type=int, metavar="",
                     required=False,
                     default=[0],
                     help="Search specific event with unique ID"
                 )
-parser.add_argument("-T", "--type", nargs="+", type=str, metavar="",
+parser.add_argument("-C", "--caching", nargs="+", type=bool, metavar="",
                     required=False,
-                    help="Select fetches border type",
-                    choices=["pt", "hs", "lp"],
-                    default=["pt"]
+                    default=False,
+                    help="Enable saving json file in the directory."
                 )
 group = parser.add_mutually_exclusive_group()
 group.add_argument("--dryrun",
@@ -42,7 +47,7 @@ group.add_argument("--static",
 )
 opt = parser.parse_args()
 
-async def main(output_type, output_path, checksum, dryrun, static, identify):
+async def main(output_path, output_type, identify, caching, checksum, dryrun, static):
 
     check_identified = lambda identify: True if (identify is not None and type(identify) is int and identify > 0) else False
     # identify_maximun = lambda identify, idmax: True if (identify is not None and identify > idmax) else 2
@@ -104,10 +109,17 @@ async def main(output_type, output_path, checksum, dryrun, static, identify):
             for category in output_type:
                 tasks.append(makeimg(category, output_path))
             await asyncio.gather(*tasks)
+        
+        if not caching:
+            os.chdir("data")
+            for file in os.listdir():
+                os.remove(file)
+            os.chdir("../")
+            os.rmdir("data")
 
     print(announcement)
 
 if __name__ == "__main__":
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    loop.run_until_complete(main(opt.type, opt.output_path, opt.checksum, opt.dryrun, opt.static, opt.identify))
+    loop.run_until_complete(main(opt.output_path, opt.output_type, opt.identify, opt.caching, opt.checksum, opt.dryrun, opt.static))
